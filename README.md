@@ -12,4 +12,8 @@
 
 ![image](https://user-images.githubusercontent.com/37764639/102798360-5447b980-43f4-11eb-8a48-36d969e6984e.png)
 
+##### 주요 코드 위치
 
+JSP 파일: /db_proj#2/workspace-sts-3.9.10.RELEASE_1_1/web_tutorial/src/main/webapp/WEB-INF/views/
+
+컨트롤러: /db_proj#2/workspace-sts-3.9.10.RELEASE_1_1/web_tutorial/src/main/java/com/kwce/
