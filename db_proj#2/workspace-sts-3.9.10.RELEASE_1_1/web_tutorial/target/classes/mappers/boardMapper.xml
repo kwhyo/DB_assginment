@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kwce.mapper.BoardMapper">
+<insert id="create">
+   INSERT
+      INTO movie_board
+      (m_ID,
+      m_title,
+      m_genre,
+      m_country,
+      m_grade,
+      m_running,
+      m_opening,
+      m_period,
+      m_rating,
+      d_name,
+      m_ticketing)
+   VALUES
+      (#{m_ID},
+      #{m_title},
+      #{m_genre},
+      #{m_country},
+      #{m_grade},
+      #{m_running},
+      #{m_opening},
+      #{m_period},
+      #{m_rating},
+      #{d_name},
+      #{m_ticketing}
+      )
+</insert>
+
+<select id="read" resultType="com.kwce.domain.BoardVO">
+SELECT
+	m_img,
+    m_ID,
+      m_title,
+      m_genre,
+      m_country,
+      m_grade,
+      m_running,
+      m_opening,
+      m_period,
+      m_rating,
+      d_name,
+      m_ticketing,
+         regdate,
+         viewcnt
+   FROM movie_board
+   WHERE m_ID = #{m_ID}
+</select>
+   
+<update id="update">
+   UPDATE movie_board
+   SET m_title=#{m_title},
+   m_genre=#{m_genre}
+   WHERE m_ID=#{m_ID}
+</update>
+   
+<select id="listPaging" resultType="com.kwce.domain.BoardVO">
+     <![CDATA[
+     SELECT
+         m_ID,
+      m_title,
+      m_genre,
+      m_grade,
+      regdate,
+      viewcnt
+     FROM movie_board
+     WHERE m_ID > 0
+     ORDER BY m_ID DESC, regdate DESC
+     LIMIT #{pageStart}, 10
+     ]]>
+ </select>
+    
+ <select id="listPagingSearch" resultType="com.kwce.domain.BoardVO">
+     <![CDATA[
+     SELECT
+        m_ID,
+	   m_title,
+	   m_genre,
+	   m_country,
+	   m_grade,
+	   m_running,
+	   m_opening,
+	   m_period,
+	   m_rating,
+	   d_name,
+	   m_ticketing,
+      regdate,
+      viewcnt
+     FROM movie_board
+     WHERE m_ID > 0
+     ]]>     
+     <include refid="search"/>
+     <![CDATA[
+     ORDER BY m_ID DESC, regdate DESC
+     LIMIT #{pageStart}, #{perPageNum}
+     ]]>
+ </select>
+    
+    
+<select id="listCriteria" resultType="com.kwce.domain.BoardVO">
+     <![CDATA[
+     SELECT
+         m_ID,
+      m_title,
+      m_genre,
+      m_grade,
+      regdate,
+      viewcnt
+     FROM movie_board
+     WHERE m_ID > 0
+     ORDER BY m_ID DESC, regdate DESC
+     LIMIT #{pageStart},#{perPageNum}
+     ]]>
+ </select>
+    
+ <delete id="delete">
+	 DELETE
+	 FROM tbl_board
+	 WHERE bno =#{bno}
+ </delete>
+   
+<update id="updateViewCnt">
+   UPDATE movie_board
+   SET viewcnt = viewcnt + 1
+   WHERE m_ID = #{m_ID}
+</update>
+   
+<select id="listAll" resultType="com.kwce.domain.BoardVO">
+	<![CDATA[
+	SELECT
+         m_ID,
+      m_title,
+      m_genre,
+      m_grade,
+      regdate,
+      viewcnt
+     FROM movie_board
+   WHERE m_ID > 0
+   ORDER BY m_ID DESC,
+   regdate DESC
+   LIMIT #{pageStart},#{perPageNum}
+   ]]>
+</select>
+   
+   
+<select id="countBoard" resultType="int">
+    <![CDATA[
+    SELECT COUNT(m_ID)
+    FROM movie_board
+    WHERE m_ID > 0
+    ]]>
+</select>
+
+<select id="listSearchCount" resultType="int">
+    <![CDATA[
+    SELECT COUNT(m_ID)
+    FROM movie_board
+    WHERE m_ID > 0
+    ]]>
+    <include refid="search"/>
+</select>
+
+<select id="listAnima" resultType="com.kwce.domain.BoardVO">
+    <![CDATA[
+    SELECT
+        m_ID,
+     m_title,
+     m_genre,
+     m_grade,
+     regdate,
+     viewcnt
+    FROM movie_board
+  WHERE m_ID > 0 and m_genre like '애%'
+  ORDER BY m_ID DESC,
+  regdate DESC
+  LIMIT #{pageStart},#{perPageNum}
+  ]]>
+</select>
+    
+    <select id="listDrama" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+        SELECT
+            m_ID,
+         m_title,
+         m_genre,
+         m_grade,
+         regdate,
+         viewcnt
+        FROM movie_board
+      WHERE m_ID > 0 and m_genre like '드%'
+      ORDER BY m_ID DESC,
+      regdate DESC
+      LIMIT #{pageStart},#{perPageNum}
+      ]]>
+    </select>
+    
+    <select id="listSF" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+        SELECT
+            m_ID,
+         m_title,
+         m_genre,
+         m_grade,
+         regdate,
+         viewcnt
+        FROM movie_board
+      WHERE m_ID > 0 and m_genre like 'S%'
+      ORDER BY m_ID DESC,
+      regdate DESC
+      LIMIT #{pageStart},#{perPageNum}
+      ]]>
+    </select>
+    
+    <select id="listActor20" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+        SELECT
+            a_ID,
+         a_name,
+         a_birthday,
+         a_gender
+        FROM actor_board
+      WHERE a_ID > 0 and a_birthday like '199%'
+      ORDER BY a_ID DESC
+      ]]>
+    </select>
+    
+     <select id="readActor" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+       SELECT distinct
+      a_ID,
+      a_name,
+      a_birthday,
+      a_gender,
+      m_ID,
+      m_title,
+      m_genre,
+      m_country,
+      m_grade,
+      m_running,
+      m_opening,
+      m_period,
+      m_rating,
+      d_name,
+      m_ticketing,
+         regdate,
+         viewcnt
+       FROM actor_board natural join actor_movie_board natural join movie_board
+   WHERE a_name = #{a_name}
+      ]]>
+    </select>
+    
+    <select id="listActor30" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+        SELECT
+            a_ID,
+         a_name,
+         a_birthday,
+         a_gender
+        FROM actor_board
+      WHERE a_ID > 0 and a_birthday like '198%'
+      ORDER BY a_ID DESC
+      ]]>
+    </select>
+    
+    <select id="listActor40" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+        SELECT
+            a_ID,
+         a_name,
+         a_birthday,
+         a_gender
+        FROM actor_board
+      WHERE a_ID > 0 and a_birthday like '197%'
+      ORDER BY a_ID DESC
+      ]]>
+    </select>
+    
+    <select id="listJGcgv" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+        SELECT DISTINCT
+        	m_ID,
+            t_name,
+            m_title            
+        FROM theater_movie_board natural join movie_board
+      WHERE t_name like '중%'
+      ]]>
+    </select>
+    
+    <select id="listNWlt" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+        SELECT DISTINCT
+        	m_ID,
+            t_name,
+            m_title            
+        FROM theater_movie_board natural join movie_board
+      WHERE t_name like '노%'
+      ]]>
+    </select>
+    
+    <select id="listMAcgv" resultType="com.kwce.domain.BoardVO">
+        <![CDATA[
+        SELECT DISTINCT
+        	m_ID,
+            t_name,
+            m_title            
+        FROM theater_movie_board natural join movie_board
+      WHERE t_name like '미%'
+      ]]>
+    </select>
+    
+    <sql id="search">
+        <if test="searchType != null">
+            <if test="searchType == 't'.toString()">
+                AND title LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'c'.toString()">
+                AND content LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'w'.toString()">
+                AND writer LIKE CONCAT('%', #{keyword}, '%')
+            </if>
+            <if test="searchType == 'tc'.toString()">
+                AND (
+                title LIKE CONCAT('%', #{keyword}, '%')
+                OR content LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="searchType == 'cw'.toString()">
+                AND (
+                content LIKE CONCAT('%', #{keyword}, '%')
+                OR writer LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+            <if test="searchType == 'tcw'.toString()">
+                AND (
+                title LIKE CONCAT('%', #{keyword}, '%')
+                OR content LIKE CONCAT('%', #{keyword}, '%')
+                OR writer LIKE CONCAT('%', #{keyword}, '%')
+                )
+            </if>
+        </if>
+    </sql>
+</mapper>
